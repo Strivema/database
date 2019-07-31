@@ -5,6 +5,7 @@
 import pymysql
 import uuid
 import random
+import datetime
 
 
 def get_conn():
@@ -47,9 +48,11 @@ def update(sql):
 if __name__ == '__main__':
     find = 'select * from temp'
     res = query(find)
+    strptime = datetime.datetime.strptime('2019-07-31', '%Y-%m-%d')
     for row in res:
-        print(row)
-        print(type(row))
+        # print(strptime)
+        # print(row)
+        # print(type(row))
 
         add = """INSERT INTO device_environment
                     (id, rainfall, temperature, humidity, wind_speed, wind_trend,soil_temperature, soil_humidity, soil_conductivity, wind_velocity, so2Value, no2Value, pm25Value, pm10Value, o31hValue, coValue, nagativeIon)
@@ -59,5 +62,12 @@ if __name__ == '__main__':
                     random.uniform(40, 80), random.uniform(0.3, 0.8), random.uniform(5, 7),
                     row['SO2Value'], row['NO2Value'], row['PM25Value'], row['PM10Value'], row['O31HValue'],
                     row['COValue'], random.uniform(10, 20))
-        print(add)
+        # print(add)
+        print(row)
+        change = """update device_environment SET record_time ='{}'""".format(
+            str(strptime.strftime("%Y-%m-%d %H:%M:%S")))
+        print(change)
+        update(change)
         # insert(add)
+        strptime = strptime + datetime.timedelta(hours=1)
+        pass
